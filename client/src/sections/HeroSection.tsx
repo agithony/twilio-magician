@@ -147,6 +147,17 @@ export default function HeroSection() {
         ref={sceneParallaxRef}
         className="absolute inset-0 opacity-70"
         style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}
+        onMouseEnter={() => {
+          const timer = window.setTimeout(() => {
+            window.dispatchEvent(new Event("crystalball-fortune"));
+          }, 5000);
+          (sceneParallaxRef.current as any).__fortuneTimer = timer;
+        }}
+        onMouseLeave={() => {
+          if (sceneParallaxRef.current) {
+            window.clearTimeout((sceneParallaxRef.current as any).__fortuneTimer);
+          }
+        }}
       >
         {use3D ? (
           <Suspense fallback={<HeroFallback />}>

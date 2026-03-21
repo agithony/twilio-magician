@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { siteConfig, socialLinks } from "../data/portfolio";
+import { useEasterEggTracker } from "../hooks/useEasterEggTracker";
 
 const socialIcons: Record<string, ReactNode> = {
   twitter: (
@@ -25,6 +26,15 @@ const socialIcons: Record<string, ReactNode> = {
 };
 
 export default function Footer() {
+  const { foundCount, total } = useEasterEggTracker();
+
+  const secretsText =
+    foundCount === 0
+      ? `${total} secrets are hidden in this site. Can you find them all?`
+      : foundCount === total
+        ? `You found all ${total} secrets. A true magician.`
+        : `${foundCount} of ${total} secrets discovered. Keep looking...`;
+
   return (
     <footer className="relative bg-magic-dark overflow-hidden">
       {/* Top decorative divider */}
@@ -70,9 +80,12 @@ export default function Footer() {
           <p className="text-xs text-gray-600">
             &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p className="text-xs text-gray-700">
-            Every trick is real. Every API call is live. No illusions here.
-          </p>
+          <a
+            href="#secrets"
+            className="text-xs text-gray-600 hover:text-magic-gold transition-colors cursor-pointer"
+          >
+            ✨ {secretsText}
+          </a>
         </div>
       </div>
 

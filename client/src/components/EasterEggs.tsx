@@ -1,12 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Konami code: up up down down left right left right b a
-const KONAMI = [
-  "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
-  "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
-  "b", "a",
-];
+import { useEasterEggTracker } from "../hooks/useEasterEggTracker";
 
 interface Sparkle {
   id: number;
@@ -16,36 +10,79 @@ interface Sparkle {
   color: string;
 }
 
+const FORTUNES = [
+  "You will ship code that works on the first try... just kidding.",
+  "A mysterious API call is in your future.",
+  "The card you're thinking of is... the Ace of Spades. No? Okay, the other one.",
+  "You will attend a conference and be amazed.",
+  "Something magical is about to happen in your terminal.",
+  "Twilio sees all. Twilio knows all. Twilio sends all.",
+  "The bug you've been chasing? Check line 42.",
+  "A great refactor is coming. Embrace it.",
+];
+
 export default function EasterEggs() {
-  const [konamiActive, setKonamiActive] = useState(false);
+  const { markFound } = useEasterEggTracker();
+
+  // --- Typed word detection ---
+  const [abracadabraActive, setAbracadabraActive] = useState(false);
+  const [fiftyTwoActive, setFiftyTwoActive] = useState(false);
+  const typedKeys = useRef("");
+
+  // --- Triple-click card picker ---
   const [showPickCard, setShowPickCard] = useState(false);
   const [pickedCard, setPickedCard] = useState<{ suit: string; value: string; color: string } | null>(null);
   const [cardRevealed, setCardRevealed] = useState(false);
-  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
-  const konamiIndex = useRef(0);
-  const sparkleId = useRef(0);
   const clickCount = useRef(0);
   const clickTimer = useRef<number>(0);
 
-  // Konami code listener
+  // --- Double-click sparkles ---
+  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
+  const sparkleId = useRef(0);
+
+  // --- Right-click message ---
+  const [showRightClick, setShowRightClick] = useState(false);
+
+  // --- Copy/highlight message ---
+  const [showCopyMsg, setShowCopyMsg] = useState(false);
+
+  // --- Idle card ---
+  const [showIdleCard, setShowIdleCard] = useState(false);
+  const idleTimer = useRef<number>(0);
+  const idleCardSuit = useRef({ suit: "\u2660", value: "A", color: "#e2e8f0" });
+
+  // --- Fortune (crystal ball hover) ---
+  const [fortune, setFortune] = useState<string | null>(null);
+
+  // --- 52-card cascade ---
+  const [cascadeCards, setCascadeCards] = useState<{ suit: string; value: string; color: string; x: number; delay: number }[]>([]);
+
+  // Typed word detection: "abracadabra" and "52"
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === KONAMI[konamiIndex.current]) {
-        konamiIndex.current++;
-        if (konamiIndex.current === KONAMI.length) {
-          setKonamiActive(true);
-          konamiIndex.current = 0;
-          setTimeout(() => setKonamiActive(false), 8000);
-        }
-      } else {
-        konamiIndex.current = 0;
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      typedKeys.current += e.key.toLowerCase();
+      // Keep buffer short
+      if (typedKeys.current.length > 20) {
+        typedKeys.current = typedKeys.current.slice(-20);
+      }
+      if (typedKeys.current.endsWith("abracadabra")) {
+        typedKeys.current = "";
+        setAbracadabraActive(true);
+        markFound("abracadabra");
+        setTimeout(() => setAbracadabraActive(false), 5000);
+      }
+      if (typedKeys.current.endsWith("52")) {
+        typedKeys.current = "";
+        markFound("52");
+        triggerCascade();
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  // Triple-click anywhere triggers "pick a card"
+  // Triple-click card picker
   useEffect(() => {
     const handleClick = () => {
       clickCount.current++;
@@ -56,6 +93,7 @@ export default function EasterEggs() {
 
       if (clickCount.current >= 3) {
         clickCount.current = 0;
+        markFound("tripleclick");
         setShowPickCard(true);
         setPickedCard(null);
         setCardRevealed(false);
@@ -65,9 +103,10 @@ export default function EasterEggs() {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  // Sparkle trail on double-click
+  // Double-click sparkles
   useEffect(() => {
     const handleDblClick = (e: MouseEvent) => {
+      markFound("doubleclick");
       const colors = ["#D97706", "#7C3AED", "#F59E0B", "#F22F46", "#FBBF24"];
       const newSparkles: Sparkle[] = Array.from({ length: 12 }, () => ({
         id: sparkleId.current++,
@@ -85,6 +124,124 @@ export default function EasterEggs() {
     return () => document.removeEventListener("dblclick", handleDblClick);
   }, []);
 
+  // Right-click message
+  useEffect(() => {
+    const handleContext = (_e: MouseEvent) => {
+      markFound("rightclick");
+      setShowRightClick(true);
+      setTimeout(() => setShowRightClick(false), 2500);
+    };
+    document.addEventListener("contextmenu", handleContext);
+    return () => document.removeEventListener("contextmenu", handleContext);
+  }, []);
+
+  // Copy/select text message
+  useEffect(() => {
+    const handleCopy = () => {
+      markFound("copytext");
+      setShowCopyMsg(true);
+      setTimeout(() => setShowCopyMsg(false), 2500);
+    };
+    let selectDebounce = 0;
+    const handleMouseUp = () => {
+      if (selectDebounce) window.clearTimeout(selectDebounce);
+      selectDebounce = window.setTimeout(() => {
+        const sel = window.getSelection();
+        if (sel && sel.toString().trim().length > 2) {
+          markFound("copytext");
+          setShowCopyMsg(true);
+          setTimeout(() => setShowCopyMsg(false), 2500);
+        }
+      }, 100);
+    };
+    document.addEventListener("copy", handleCopy);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("copy", handleCopy);
+      document.removeEventListener("mouseup", handleMouseUp);
+      if (selectDebounce) window.clearTimeout(selectDebounce);
+    };
+  }, []);
+
+  // Idle timer — 30 seconds of no interaction
+  useEffect(() => {
+    const resetIdle = () => {
+      if (idleTimer.current) window.clearTimeout(idleTimer.current);
+      setShowIdleCard(false);
+      idleTimer.current = window.setTimeout(() => {
+        const suits = [
+          { suit: "\u2660", color: "#e2e8f0" },
+          { suit: "\u2665", color: "#DC2626" },
+          { suit: "\u2666", color: "#DC2626" },
+          { suit: "\u2663", color: "#e2e8f0" },
+        ];
+        const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        const s = suits[Math.floor(Math.random() * 4)];
+        const v = values[Math.floor(Math.random() * 13)];
+        idleCardSuit.current = { suit: s.suit, value: v, color: s.color };
+        markFound("idle");
+        setShowIdleCard(true);
+      }, 15000);
+    };
+    resetIdle();
+    window.addEventListener("mousemove", resetIdle, { passive: true });
+    window.addEventListener("keydown", resetIdle);
+    window.addEventListener("scroll", resetIdle, { passive: true });
+    window.addEventListener("touchstart", resetIdle, { passive: true });
+    return () => {
+      if (idleTimer.current) window.clearTimeout(idleTimer.current);
+      window.removeEventListener("mousemove", resetIdle);
+      window.removeEventListener("keydown", resetIdle);
+      window.removeEventListener("scroll", resetIdle);
+      window.removeEventListener("touchstart", resetIdle);
+    };
+  }, []);
+
+  // Portrait click — listen for custom event from AboutSection
+  useEffect(() => {
+    const handler = () => markFound("portrait");
+    window.addEventListener("portrait-easter-egg", handler);
+    return () => window.removeEventListener("portrait-easter-egg", handler);
+  }, [markFound]);
+
+  // Crystal ball fortune — listen for custom event dispatched from HeroSection
+  useEffect(() => {
+    const handleFortune = () => {
+      markFound("crystalball");
+      setFortune(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]);
+      setTimeout(() => setFortune(null), 4000);
+    };
+    window.addEventListener("crystalball-fortune", handleFortune);
+    return () => window.removeEventListener("crystalball-fortune", handleFortune);
+  }, []);
+
+  // 52 card cascade
+  const triggerCascade = useCallback(() => {
+    const suits = [
+      { symbol: "\u2660", color: "#e2e8f0" },
+      { symbol: "\u2665", color: "#DC2626" },
+      { symbol: "\u2666", color: "#DC2626" },
+      { symbol: "\u2663", color: "#e2e8f0" },
+    ];
+    const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const cards = suits.flatMap((s) =>
+      values.map((v) => ({
+        suit: s.symbol,
+        value: v,
+        color: s.color,
+        x: Math.random() * 90 + 5,
+        delay: Math.random() * 2,
+      }))
+    );
+    setCascadeCards(cards);
+    setFiftyTwoActive(true);
+    setTimeout(() => {
+      setFiftyTwoActive(false);
+      setCascadeCards([]);
+    }, 5000);
+  }, []);
+
+  // Pick a card
   const pickRandomCard = useCallback(() => {
     const suits = [
       { symbol: "\u2660", name: "Spades", color: "#e2e8f0" },
@@ -101,62 +258,171 @@ export default function EasterEggs() {
 
   return (
     <>
-      {/* Konami Code Reward */}
+      {/* === ABRACADABRA === */}
       <AnimatePresence>
-        {konamiActive && (
+        {abracadabraActive && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] pointer-events-none flex items-center justify-center"
+            className="fixed inset-0 z-[200] flex items-center justify-center pointer-events-none"
           >
-            {/* Firework sparkles everywhere */}
-            {Array.from({ length: 30 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-3 h-3 rounded-full"
-                style={{
-                  background: ["#D97706", "#7C3AED", "#F22F46", "#F59E0B", "#FBBF24"][i % 5],
-                  boxShadow: `0 0 10px ${["#D97706", "#7C3AED", "#F22F46", "#F59E0B", "#FBBF24"][i % 5]}`,
-                }}
-                initial={{
-                  x: 0,
-                  y: 0,
-                  scale: 0,
-                  opacity: 0,
-                }}
-                animate={{
-                  x: (Math.random() - 0.5) * window.innerWidth * 0.8,
-                  y: (Math.random() - 0.5) * window.innerHeight * 0.8,
-                  scale: [0, 1.5, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 2,
-                  delay: Math.random() * 0.5,
-                  repeat: 3,
-                  repeatDelay: 0.5,
-                }}
-              />
-            ))}
-            {/* Secret message */}
+            {/* Dark overlay */}
             <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: 180 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="glass-card rounded-2xl p-8 text-center magic-glow-intense"
+              className="absolute inset-0 bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.95, 0.95, 0] }}
+              transition={{ duration: 5, times: [0, 0.1, 0.85, 1] }}
+            />
+            {/* Top hat & message */}
+            <motion.div
+              className="relative z-10 text-center"
+              initial={{ scale: 0, y: 50 }}
+              animate={{ scale: [0, 1.2, 1], y: [50, -10, 0] }}
+              exit={{ scale: 0, y: -50 }}
+              transition={{ duration: 0.8, ease: "backOut" }}
             >
-              <p className="text-4xl mb-3">✨🎩✨</p>
-              <p className="font-display text-2xl magic-text-gradient mb-2">You Found the Secret!</p>
-              <p className="text-gray-400 text-sm">A true magician never reveals their secrets...</p>
-              <p className="text-gray-500 text-xs mt-2">...but you clearly know the magic code.</p>
+              <div className="text-8xl mb-4">🎩</div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <p className="font-display text-3xl magic-text-gradient mb-2">Abracadabra!</p>
+                <p className="text-gray-400 text-sm">You said the magic word.</p>
+              </motion.div>
+              {/* Sparkle burst */}
+              {Array.from({ length: 20 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full"
+                  style={{
+                    background: ["#D97706", "#7C3AED", "#F22F46", "#F59E0B", "#FBBF24"][i % 5],
+                    left: "50%",
+                    top: "30%",
+                  }}
+                  animate={{
+                    x: (Math.random() - 0.5) * 300,
+                    y: (Math.random() - 0.5) * 300,
+                    opacity: [0, 1, 0],
+                    scale: [0, 1.5, 0],
+                  }}
+                  transition={{ duration: 1.5, delay: 0.3 + Math.random() * 0.3 }}
+                />
+              ))}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Pick a Card Modal */}
+      {/* === 52-CARD CASCADE === */}
+      <AnimatePresence>
+        {fiftyTwoActive && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] pointer-events-none overflow-hidden"
+          >
+            {cascadeCards.map((card, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-[50px] h-[70px] rounded-md border border-magic-gold/30 bg-gradient-to-br from-[#1a1a2e] to-[#12101f] flex flex-col items-center justify-center shadow-lg"
+                style={{ left: `${card.x}%` }}
+                initial={{ y: -100, rotate: Math.random() * 360 - 180, opacity: 0 }}
+                animate={{
+                  y: window.innerHeight + 100,
+                  rotate: Math.random() * 720 - 360,
+                  opacity: [0, 1, 1, 0.5],
+                }}
+                transition={{
+                  duration: 2.5 + Math.random(),
+                  delay: card.delay,
+                  ease: "easeIn",
+                }}
+              >
+                <span className="text-[8px] font-bold absolute top-0.5 left-1" style={{ color: card.color }}>{card.value}</span>
+                <span className="text-base" style={{ color: card.color }}>{card.suit}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* === CRYSTAL BALL FORTUNE === */}
+      <AnimatePresence>
+        {fortune && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] glass-card rounded-2xl px-8 py-5 max-w-md text-center magic-glow"
+          >
+            <p className="text-magic-gold text-xs tracking-[0.3em] uppercase mb-2">The Crystal Ball Reveals...</p>
+            <p className="text-gray-300 text-sm italic leading-relaxed">{fortune}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* === RIGHT-CLICK MESSAGE === */}
+      <AnimatePresence>
+        {showRightClick && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[200] glass-card rounded-2xl px-10 py-5 pointer-events-none"
+          >
+            <p className="text-lg text-gray-300 whitespace-nowrap">
+              <span className="text-magic-gold text-xl">🪄</span> A magician never reveals their source code.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* === COPY TEXT MESSAGE === */}
+      <AnimatePresence>
+        {showCopyMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[200] glass-card rounded-2xl px-10 py-5 pointer-events-none"
+          >
+            <p className="text-lg text-gray-300 whitespace-nowrap">
+              <span className="text-magic-gold text-xl">✨</span> Nice try... that trick's copyrighted.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* === IDLE CARD === */}
+      <AnimatePresence>
+        {showIdleCard && (
+          <motion.div
+            initial={{ x: -120 }}
+            animate={{ x: 0 }}
+            exit={{ x: -120 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            className="fixed left-0 top-1/2 -translate-y-1/2 z-[100] cursor-pointer"
+            onClick={() => setShowIdleCard(false)}
+          >
+            <div className="w-[120px] h-[168px] rounded-r-xl border border-l-0 border-magic-gold/30 bg-gradient-to-br from-[#1a1a2e] to-[#12101f] flex flex-col items-center justify-center shadow-2xl relative">
+              <span className="text-sm font-bold absolute top-3 left-4" style={{ color: idleCardSuit.current.color }}>
+                {idleCardSuit.current.value}
+              </span>
+              <span className="text-4xl" style={{ color: idleCardSuit.current.color }}>
+                {idleCardSuit.current.suit}
+              </span>
+              <span className="text-xs text-gray-500 mt-4 px-3 text-center leading-tight">
+                Still here?
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* === PICK A CARD MODAL (triple-click) === */}
       <AnimatePresence>
         {showPickCard && (
           <motion.div
@@ -271,7 +537,7 @@ export default function EasterEggs() {
                       <p className="text-magic-gold font-heading text-lg">
                         The {pickedCard.value} of {pickedCard.suit === "\u2660" ? "Spades" : pickedCard.suit === "\u2665" ? "Hearts" : pickedCard.suit === "\u2666" ? "Diamonds" : "Clubs"}
                       </p>
-                      <p className="text-gray-500 text-sm mt-2">Was that your card? Of course it was.</p>
+                      <p className="text-gray-500 text-sm mt-2">Was that your card? ...yeah I have no idea, I'm a website not a magician.</p>
                     </motion.div>
                   )}
 

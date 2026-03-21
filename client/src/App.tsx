@@ -16,11 +16,14 @@ import VideoGallery from "./sections/VideoGallery";
 import ImageGallery from "./sections/ImageGallery";
 import BookingSection from "./sections/BookingSection";
 import ContactSection from "./sections/ContactSection";
+import SecretsSection from "./sections/SecretsSection";
 import { SoundManagerContext, useSoundManagerProvider } from "./hooks/useSoundManager";
+import { EasterEggTrackerContext, useEasterEggTrackerProvider } from "./hooks/useEasterEggTracker";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const soundManager = useSoundManagerProvider();
+  const easterEggTracker = useEasterEggTrackerProvider();
   const musicStarted = useRef(false);
 
   useEffect(() => {
@@ -41,6 +44,7 @@ export default function App() {
   }, [soundManager]);
 
   return (
+    <EasterEggTrackerContext.Provider value={easterEggTracker}>
     <SoundManagerContext.Provider value={soundManager}>
       <MagicCursor />
 
@@ -69,6 +73,8 @@ export default function App() {
             <ImageGallery />
             <MagicDivider variant="wand" />
             <BookingSection />
+            <MagicDivider variant="stars" />
+            <SecretsSection />
             <MagicDivider variant="simple" />
             <ContactSection />
           </main>
@@ -76,5 +82,6 @@ export default function App() {
         </>
       )}
     </SoundManagerContext.Provider>
+    </EasterEggTrackerContext.Provider>
   );
 }
