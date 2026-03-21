@@ -50,16 +50,16 @@ function CrystalBall() {
         <mesh ref={meshRef} renderOrder={2}>
           <sphereGeometry args={[1.8, 64, 64]} />
           <meshPhysicalMaterial
-            color="#7C3AED"
-            transmission={0.92}
-            roughness={0.05}
-            thickness={0.4}
-            envMapIntensity={1}
+            color="#5B21B6"
+            transmission={0.8}
+            roughness={0.08}
+            thickness={0.6}
+            envMapIntensity={1.2}
             clearcoat={1}
-            clearcoatRoughness={0.1}
+            clearcoatRoughness={0.08}
             ior={1.5}
             transparent
-            opacity={0.2}
+            opacity={0.35}
             side={THREE.FrontSide}
           />
         </mesh>

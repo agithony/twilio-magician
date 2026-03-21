@@ -212,7 +212,7 @@ export default function HeroSection() {
           ref={subtitleRef}
           className="font-heading italic text-xl md:text-2xl text-magic-purple/80 mb-4"
         >
-          Anthony Dellavecchia
+          Anthony, Developer Evangelist
         </p>
 
         <p

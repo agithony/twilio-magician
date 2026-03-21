@@ -11,9 +11,9 @@ function getThumbnail(embedUrl: string, thumbnail: string): string | null {
   const ytMatch = embedUrl.match(/youtube\.com\/embed\/([^?&]+)/);
   if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
 
-  // Google Drive: extract file ID and use thumbnail API
+  // Google Drive: extract file ID and use direct export URL
   const driveMatch = embedUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if (driveMatch) return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w640`;
+  if (driveMatch) return `https://lh3.googleusercontent.com/d/${driveMatch[1]}=s640`;
 
   return null;
 }
@@ -59,6 +59,8 @@ export default function VideoGallery() {
                   alt={video.title}
                   className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
                   loading="lazy"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
               )}
               {/* Mini curtain accents */}

@@ -27,7 +27,14 @@ export default function App() {
       <MagicCursor />
 
       <AnimatePresence>
-        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+        {loading && (
+          <LoadingScreen
+            onComplete={() => {
+              setLoading(false);
+              soundManager.startMusic();
+            }}
+          />
+        )}
       </AnimatePresence>
 
       {!loading && (

@@ -38,7 +38,7 @@ export default function ParticleField() {
     resize();
     window.addEventListener("resize", resize);
 
-    const count = isMobile ? 15 : 30;
+    const count = isMobile ? 4 : 8;
     particlesRef.current = Array.from({ length: count }, (): Particle => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,

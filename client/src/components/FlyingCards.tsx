@@ -45,7 +45,7 @@ export default function FlyingCards() {
     resize();
     window.addEventListener("resize", resize);
 
-    const maxCards = isMobile ? 4 : 8;
+    const maxCards = isMobile ? 3 : 7;
     let spawnTimer = 0;
 
     const spawnCard = () => {
