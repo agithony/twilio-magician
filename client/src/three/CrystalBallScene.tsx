@@ -1,19 +1,14 @@
 import { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Stars, Environment } from "@react-three/drei";
+import { Float, Stars, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
 function CrystalBall() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const innerRef = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = clock.getElapsedTime() * 0.1;
-    }
-    if (innerRef.current) {
-      innerRef.current.rotation.y = -clock.getElapsedTime() * 0.2;
-      innerRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.3) * 0.2;
     }
   });
 
@@ -21,42 +16,23 @@ function CrystalBall() {
     <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
       <group>
         {/* Outer glass sphere */}
-        <mesh ref={meshRef}>
+        <mesh ref={meshRef} renderOrder={2}>
           <sphereGeometry args={[1.8, 64, 64]} />
           <meshPhysicalMaterial
             color="#7C3AED"
-            transmission={0.9}
+            transmission={0.92}
             roughness={0.05}
-            thickness={0.5}
+            thickness={0.4}
             envMapIntensity={1}
             clearcoat={1}
             clearcoatRoughness={0.1}
             ior={1.5}
             transparent
-            opacity={0.3}
+            opacity={0.2}
+            side={THREE.FrontSide}
           />
         </mesh>
 
-        {/* Inner swirling energy */}
-        <mesh ref={innerRef} scale={1.2}>
-          <sphereGeometry args={[1, 32, 32]} />
-          <MeshDistortMaterial
-            color="#D97706"
-            emissive="#7C3AED"
-            emissiveIntensity={0.4}
-            distort={0.4}
-            speed={3}
-            roughness={0.2}
-            transparent
-            opacity={0.6}
-          />
-        </mesh>
-
-        {/* Core glow */}
-        <mesh scale={0.5}>
-          <sphereGeometry args={[1, 16, 16]} />
-          <meshBasicMaterial color="#F59E0B" transparent opacity={0.8} />
-        </mesh>
 
         {/* Point light inside */}
         <pointLight color="#D97706" intensity={2} distance={5} />

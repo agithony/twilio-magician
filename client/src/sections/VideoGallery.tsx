@@ -4,6 +4,20 @@ import SectionWrapper from "../components/SectionWrapper";
 import { videos } from "../data/portfolio";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
+function getThumbnail(embedUrl: string, thumbnail: string): string | null {
+  if (thumbnail) return thumbnail;
+
+  // YouTube: extract video ID and use maxresdefault
+  const ytMatch = embedUrl.match(/youtube\.com\/embed\/([^?&]+)/);
+  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+
+  // Google Drive: extract file ID and use thumbnail API
+  const driveMatch = embedUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (driveMatch) return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w640`;
+
+  return null;
+}
+
 export default function VideoGallery() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const headerRef = useScrollAnimation<HTMLDivElement>("fadeUp");
@@ -25,7 +39,7 @@ export default function VideoGallery() {
         </p>
       </div>
 
-      <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {videos.map((video) => (
           <motion.div
             key={video.id}
@@ -38,6 +52,15 @@ export default function VideoGallery() {
           >
             {/* Thumbnail area - stage aesthetic */}
             <div className="relative aspect-video bg-gradient-to-br from-magic-deeper via-magic-dark to-magic-deeper overflow-hidden">
+              {/* Thumbnail image */}
+              {getThumbnail(video.embedUrl, video.thumbnail) && (
+                <img
+                  src={getThumbnail(video.embedUrl, video.thumbnail)!}
+                  alt={video.title}
+                  className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
+                  loading="lazy"
+                />
+              )}
               {/* Mini curtain accents */}
               <div className="absolute top-0 left-0 w-6 h-full bg-gradient-to-r from-magic-purple/10 to-transparent z-10" />
               <div className="absolute top-0 right-0 w-6 h-full bg-gradient-to-l from-magic-purple/10 to-transparent z-10" />

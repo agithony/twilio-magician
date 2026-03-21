@@ -49,14 +49,7 @@ export default function Navbar() {
           href="#hero"
           className="group flex items-center gap-2.5"
         >
-          {/* Wand icon */}
-          <div className="w-7 h-7 flex items-center justify-center">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 text-magic-gold group-hover:text-magic-gold-light transition-colors" fill="none" stroke="currentColor" strokeWidth={1.5}>
-              <path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M12.2 11.8L11 13M12.2 6.2L11 5" strokeLinecap="round" />
-              <circle cx="15" cy="9" r="3" />
-              <path d="M12 21l-6.5-6.5M3 21l2-2" strokeLinecap="round" />
-            </svg>
-          </div>
+          <img src="/images/twilio-logo.png" alt="Twilio" className="w-7 h-7 object-contain" />
           <span className="font-display text-lg text-white group-hover:text-magic-gold-light transition-colors">
             {siteConfig.name}
           </span>

@@ -42,7 +42,7 @@ export const aboutContent = {
     "What started as a creative way to teach Twilio quickly became something bigger. Full-on magic shows powered by real APIs — where cards appear on phones, voices reveal chosen numbers, and messages arrive at the exact moment of the reveal. Every trick surprises, teaches, and sticks with audiences long after the show ends.",
     "Anthony brings this unique blend of code and wonder to developer conferences, corporate events, trade shows, and private events worldwide.",
   ],
-  image: "/images/magician-portrait.png",
+  image: "/images/magician-portrait.jpeg",
 };
 
 export const conceptContent = {
@@ -136,41 +136,75 @@ export const tricks: Trick[] = [
 
 export const videos: Video[] = [
   {
-    id: "demo-reel",
-    title: "The Twilio Magician — Demo Reel",
-    embedUrl: "https://www.youtube.com/embed/placeholder1",
-    thumbnail: "/images/videos/demo-reel-thumb.jpg",
-    description: "A highlight reel showcasing the best moments from live performances.",
+    id: "v1",
+    title: "Twilio Magic at CascadiaJS",
+    embedUrl: "https://www.youtube.com/embed/jiQo0nQGXP0",
+    thumbnail: "",
+    description: "A full Twilio-powered magic performance live on stage at CascadiaJS.",
   },
   {
-    id: "conference-show",
-    title: "Live at SIGNAL Conference",
-    embedUrl: "https://www.youtube.com/embed/placeholder2",
-    thumbnail: "/images/videos/conference-thumb.jpg",
-    description: "Full performance from the Twilio SIGNAL developer conference.",
+    id: "v2",
+    title: "SF HQ Office with Omar and Chris",
+    embedUrl: "https://drive.google.com/file/d/1N48sWCVggEfWE37yWwveBB7GWwjZ8uoz/preview",
+    thumbnail: "",
+    description: "Close-up magic at the Twilio SF headquarters with special guests.",
   },
   {
-    id: "behind-scenes",
-    title: "Behind the Magic",
-    embedUrl: "https://www.youtube.com/embed/placeholder3",
-    thumbnail: "/images/videos/behind-scenes-thumb.jpg",
-    description: "A behind-the-scenes look at how the tricks are built with Twilio.",
+    id: "v3",
+    title: "Street Magic in SF",
+    embedUrl: "https://drive.google.com/file/d/1CASbjUnRpvSD2V9t3DXkN0w20kRazHLV/preview",
+    thumbnail: "",
+    description: "Taking Twilio-powered tricks to the streets of San Francisco.",
+  },
+  {
+    id: "v4",
+    title: "Street Magic at Food Truck",
+    embedUrl: "https://drive.google.com/file/d/1WlWrVFvDud8W8bmoP9HpIIYyQ2_v2bFm/preview",
+    thumbnail: "",
+    description: "Surprising unsuspecting foodies with some impromptu magic.",
+  },
+  {
+    id: "v5",
+    title: "Magic at VSLive",
+    embedUrl: "https://drive.google.com/file/d/1gYPcP4BajimyBQc5QZcuIPGA1CEYfKH1/preview",
+    thumbnail: "",
+    description: "Live magic performance at the VSLive developer conference.",
+  },
+  {
+    id: "v6",
+    title: "Street Magic with Trak",
+    embedUrl: "https://drive.google.com/file/d/1T7k2MYH5aNrGOuz0HjWDuxx8uwHod8g2/preview",
+    thumbnail: "",
+    description: "An impromptu street magic session with Trak.",
+  },
+  {
+    id: "v7",
+    title: "Magic with Tony",
+    embedUrl: "https://drive.google.com/file/d/1Xwu_v922eQfH6Ww8_Hrh0eiE_0KDraAd/preview",
+    thumbnail: "",
+    description: "A close-up magic session featuring some audience favorites.",
+  },
+  {
+    id: "v8",
+    title: "SF Office with Hemaleka",
+    embedUrl: "https://drive.google.com/file/d/1bR5VmOMLPOkhNvIHKDfrVVGon8neEYtY/preview",
+    thumbnail: "",
+    description: "Twilio magic tricks at the SF office with Hemaleka.",
   },
 ];
 
 export const galleryImages: GalleryImage[] = [
-  { id: "g1", src: "/images/gallery/event-1.jpg", alt: "Live performance at corporate event", event: "Corporate Gala 2024" },
-  { id: "g2", src: "/images/gallery/event-2.jpg", alt: "Stage magic with audience participation", event: "SIGNAL Conference" },
-  { id: "g3", src: "/images/gallery/event-3.jpg", alt: "Close-up magic with playing cards", event: "Private Event" },
-  { id: "g4", src: "/images/gallery/event-4.jpg", alt: "Audience reaction to phone reveal", event: "Tech Summit 2024" },
-  { id: "g5", src: "/images/gallery/event-5.jpg", alt: "On stage with dramatic lighting", event: "Developer Conference" },
-  { id: "g6", src: "/images/gallery/event-6.jpg", alt: "Card trick with Twilio integration", event: "Product Launch" },
+  { id: "g1", src: "/images/gallery/gallery-1.jpg", alt: "Live magic performance", event: "" },
+  { id: "g2", src: "/images/gallery/gallery-2.jpg", alt: "Twilio-powered card trick", event: "" },
+  { id: "g3", src: "/images/gallery/gallery-3.jpg", alt: "Audience participation moment", event: "" },
+  { id: "g4", src: "/images/gallery/gallery-4.jpg", alt: "On stage with dramatic lighting", event: "" },
+  { id: "g5", src: "/images/gallery/gallery-5.jpg", alt: "Close-up magic", event: "" },
 ];
 
 export const whyItWorks = {
   headline: "Why It Works",
   description:
-    "The Twilio Magician isn't just a magic show — it's a live demonstration of technology's potential wrapped in wonder.",
+    "It's not just a magic show — it's a live demo of Twilio products.",
   reasons: [
     {
       title: "Engagement",
@@ -188,9 +222,9 @@ export const whyItWorks = {
         "Each trick subtly demonstrates a Twilio product in action. Audiences learn what the platform can do by experiencing it firsthand.",
     },
     {
-      title: "Versatility",
+      title: "Connection",
       description:
-        "From 20-person boardrooms to 2,000-seat conference halls, the show scales to any audience and any event.",
+        "Magic breaks down walls. In seconds, an entire room goes from strangers to a shared experience — laughing, gasping, and talking to each other.",
     },
   ],
 };

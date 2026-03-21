@@ -42,35 +42,86 @@ export default function AboutSection() {
   return (
     <SectionWrapper id="about">
       <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-        {/* Image side */}
-        <div ref={leftRef} className="relative">
+        {/* Image side — playing card design */}
+        <div ref={leftRef} className="relative flex justify-center">
           <div
-            className="relative aspect-[4/5] rounded-2xl overflow-visible group"
+            className="relative aspect-[3/4] w-full max-w-sm rounded-xl overflow-visible group"
             style={{ perspective: "800px" }}
           >
             {/* Glow border effect */}
-            <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-magic-purple/30 via-magic-gold/20 to-magic-purple/30 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute -inset-1 rounded-xl bg-gradient-to-br from-magic-purple/30 via-magic-gold/20 to-magic-purple/30 opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
             <div
-              className="absolute inset-[1px] rounded-2xl overflow-hidden bg-magic-dark transition-transform duration-700 ease-out group-hover:[transform:rotateY(8deg)_rotateX(-3deg)_scale(1.02)]"
+              className="absolute inset-0 rounded-xl overflow-hidden bg-gradient-to-b from-[#f5f0e8] to-[#ebe5d9] transition-transform duration-700 ease-out group-hover:[transform:rotateY(8deg)_rotateX(-3deg)_scale(1.02)] shadow-2xl"
               style={{ transformStyle: "preserve-3d" }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-magic-purple/10 to-magic-gold/10" />
-              <img
-                src={aboutContent.image}
-                alt="The Twilio Magician"
-                className="w-full h-full object-cover"
-                loading="lazy"
+              {/* Outer border band */}
+              <div className="absolute inset-0 rounded-xl border-[3px] border-red-700/20 pointer-events-none z-20" />
+
+              {/* Ornate inner border */}
+              <div className="absolute inset-[10px] rounded-lg border-2 border-red-700/15 pointer-events-none z-20" />
+              <div className="absolute inset-[13px] rounded-lg border border-red-700/10 pointer-events-none z-20" />
+
+              {/* Corner filigree dots */}
+              <div className="absolute top-[18px] left-[18px] w-1.5 h-1.5 rounded-full bg-red-700/20 z-20" />
+              <div className="absolute top-[18px] right-[18px] w-1.5 h-1.5 rounded-full bg-red-700/20 z-20" />
+              <div className="absolute bottom-[18px] left-[18px] w-1.5 h-1.5 rounded-full bg-red-700/20 z-20" />
+              <div className="absolute bottom-[18px] right-[18px] w-1.5 h-1.5 rounded-full bg-red-700/20 z-20" />
+
+              {/* Top-left corner: value + suit */}
+              <div className="absolute top-4 left-5 z-10 flex items-center gap-1 leading-none">
+                <span className="text-4xl font-serif font-bold text-red-700">K</span>
+                <span className="text-4xl text-red-700">{"\u2665"}</span>
+              </div>
+
+              {/* Top-right small suit */}
+              <div className="absolute top-6 right-5 z-10">
+                <span className="text-sm text-red-700/30">{"\u2665"}</span>
+              </div>
+
+              {/* Bottom-left small suit */}
+              <div className="absolute bottom-6 left-5 z-10 rotate-180">
+                <span className="text-sm text-red-700/30">{"\u2665"}</span>
+              </div>
+
+              {/* Bottom-right corner: value + suit (rotated) */}
+              <div className="absolute bottom-4 right-5 z-10 flex items-center gap-1 leading-none rotate-180">
+                <span className="text-4xl font-serif font-bold text-red-700">K</span>
+                <span className="text-4xl text-red-700">{"\u2665"}</span>
+              </div>
+
+              {/* Photo area — inset with ornate border */}
+              <div className="absolute inset-x-[42px] top-[110px] bottom-[110px] overflow-hidden z-10">
+                <div className="absolute -inset-[2px] border-2 border-red-700/20 rounded-sm pointer-events-none z-10" />
+                <picture>
+                  <source srcSet="/images/magician-portrait.png" type="image/png" />
+                  <source srcSet="/images/magician-portrait.jpg" type="image/jpeg" />
+                  <source srcSet="/images/magician-portrait.jpeg" type="image/jpeg" />
+                  <img
+                    src="/images/magician-portrait.png"
+                    alt="The Twilio Magician"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </picture>
+                {/* Subtle vignette over photo */}
+                <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.15)] pointer-events-none" />
+              </div>
+
+              {/* Decorative center suit watermark behind photo */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.03]">
+                <span className="text-[200px] text-red-700">{"\u2665"}</span>
+              </div>
+
+              {/* Subtle card texture */}
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-20"
+                style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3h1v1H1V3zm2-2h1v1H3V1z' fill='%23000' fill-opacity='1'/%3E%3C/svg%3E\")" }}
               />
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-magic-dark/40 to-transparent" />
+
               {/* Shine sweep on hover */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-30" />
             </div>
           </div>
 
-          {/* Floating card decorations */}
-          <FloatingCard value="A" suit={"\u2660"} color="#e2e8f0" delay={0} className="-bottom-4 -right-4" />
-          <FloatingCard value="K" suit={"\u2665"} color="#DC2626" delay={0.8} className="-top-3 -left-3 hidden md:flex" />
 
           {/* Background accent */}
           <div className="absolute -z-10 -bottom-8 -right-8 w-48 h-48 rounded-full bg-magic-purple/5 blur-3xl" />
