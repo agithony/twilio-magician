@@ -48,24 +48,24 @@ export const aboutContent = {
 export const conceptContent = {
   headline: "What is the Twilio Magician?",
   description:
-    "A one-of-a-kind performance that merges classic stage magic with live tech demos powered by Twilio and AI.",
+    "A one-of-a-kind performance that merges magic with live tech demos powered by Twilio and AI.",
   features: [
     {
       title: "Real Magic",
       description:
-        "Classic sleight of hand and stage illusions that captivate any audience, from intimate groups to packed conference halls.",
+        "Card tricks, mind reading, and impossible predictions — performed live with nothing but a phone.",
       icon: "wand",
     },
     {
       title: "Real Technology",
       description:
-        "Every trick is powered by Twilio APIs — SMS, Voice, Video, and more. The audience's own devices become part of the show.",
+        "Every trick is powered by Twilio APIs and AI — SMS, Voice, Video, and more. The audience's own phones become part of the show.",
       icon: "code",
     },
     {
       title: "Real Impact",
       description:
-        "Audiences don't just watch — they participate. They leave inspired by the possibilities of what technology can do.",
+        "It's a tech demo disguised as a magic show. Audiences walk away talking about both the tricks and the tech behind them.",
       icon: "sparkles",
     },
   ],
