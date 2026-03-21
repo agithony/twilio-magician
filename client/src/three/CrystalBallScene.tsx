@@ -3,6 +3,37 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Stars, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
+const standMaterial = new THREE.MeshStandardMaterial({
+  color: "#8B7536",
+  metalness: 0.9,
+  roughness: 0.25,
+});
+
+const standAccentMaterial = new THREE.MeshStandardMaterial({
+  color: "#C9A84C",
+  metalness: 0.95,
+  roughness: 0.15,
+});
+
+function Stand() {
+  return (
+    <group position={[0, -2.2, 0]}>
+      {/* Base plate */}
+      <mesh position={[0, 0, 0]} material={standMaterial}>
+        <cylinderGeometry args={[1.5, 1.7, 0.16, 32]} />
+      </mesh>
+      {/* Central pillar */}
+      <mesh position={[0, 0.45, 0]} material={standMaterial}>
+        <cylinderGeometry args={[0.3, 0.55, 0.7, 16]} />
+      </mesh>
+      {/* Cradle — wider cup shape that holds the ball */}
+      <mesh position={[0, 0.85, 0]} material={standAccentMaterial}>
+        <cylinderGeometry args={[1.1, 0.4, 0.15, 32]} />
+      </mesh>
+    </group>
+  );
+}
+
 function CrystalBall() {
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -13,8 +44,8 @@ function CrystalBall() {
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
-      <group>
+    <Float speed={2} rotationIntensity={0.2} floatIntensity={0.3}>
+      <group position={[0, 0.5, 0]}>
         {/* Outer glass sphere */}
         <mesh ref={meshRef} renderOrder={2}>
           <sphereGeometry args={[1.8, 64, 64]} />
@@ -33,10 +64,12 @@ function CrystalBall() {
           />
         </mesh>
 
-
         {/* Point light inside */}
         <pointLight color="#D97706" intensity={2} distance={5} />
         <pointLight color="#7C3AED" intensity={1} distance={8} position={[0, 2, 0]} />
+
+        {/* Stand */}
+        <Stand />
       </group>
     </Float>
   );
