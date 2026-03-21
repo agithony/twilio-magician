@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -21,20 +21,31 @@ import { SoundManagerContext, useSoundManagerProvider } from "./hooks/useSoundMa
 export default function App() {
   const [loading, setLoading] = useState(true);
   const soundManager = useSoundManagerProvider();
+  const musicStarted = useRef(false);
+
+  useEffect(() => {
+    const handler = () => {
+      if (!musicStarted.current) {
+        musicStarted.current = true;
+        soundManager.startMusic();
+      }
+      document.removeEventListener("click", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+    document.addEventListener("click", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("click", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, [soundManager]);
 
   return (
     <SoundManagerContext.Provider value={soundManager}>
       <MagicCursor />
 
       <AnimatePresence>
-        {loading && (
-          <LoadingScreen
-            onComplete={() => {
-              setLoading(false);
-              soundManager.startMusic();
-            }}
-          />
-        )}
+        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
       {!loading && (

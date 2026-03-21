@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 
 interface SoundManagerContextType {
   enabled: boolean;
@@ -17,49 +17,36 @@ export const SoundManagerContext = createContext<SoundManagerContextType>({
 export function useSoundManagerProvider() {
   const [enabled, setEnabled] = useState(true);
   const enabledRef = useRef(true);
-  const bgMusicRef = useRef<Howl | null>(null);
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null);
   const sfxCacheRef = useRef<Record<string, Howl>>({});
 
-  const startMusic = useCallback(async () => {
-    if (!enabledRef.current) return;
-    if (bgMusicRef.current) {
-      bgMusicRef.current.play();
-      return;
-    }
-    const { Howl } = await import("howler");
-    const music = new Howl({
-      src: ["/sounds/bg-music.mp3"],
-      volume: 0.15,
-      loop: true,
-      html5: true,
-    });
-    bgMusicRef.current = music;
-    music.play();
+  // Preload background music as a plain HTML5 audio element (no async import needed)
+  useEffect(() => {
+    const audio = new Audio("/sounds/bg-music.mp3");
+    audio.loop = true;
+    audio.volume = 0.15;
+    audio.preload = "auto";
+    bgMusicRef.current = audio;
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
   }, []);
 
-  const toggle = useCallback(async () => {
+  const startMusic = useCallback(() => {
+    if (!enabledRef.current) return;
+    bgMusicRef.current?.play();
+  }, []);
+
+  const toggle = useCallback(() => {
     const next = !enabledRef.current;
     enabledRef.current = next;
     setEnabled(next);
 
     if (next) {
-      if (bgMusicRef.current) {
-        bgMusicRef.current.play();
-      } else {
-        const { Howl } = await import("howler");
-        const music = new Howl({
-          src: ["/sounds/bg-music.mp3"],
-          volume: 0.15,
-          loop: true,
-          html5: true,
-        });
-        bgMusicRef.current = music;
-        music.play();
-      }
+      bgMusicRef.current?.play();
     } else {
-      if (bgMusicRef.current) {
-        bgMusicRef.current.pause();
-      }
+      bgMusicRef.current?.pause();
     }
   }, []);
 
