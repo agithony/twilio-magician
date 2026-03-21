@@ -1,0 +1,128 @@
+import { useRef, useMemo, Suspense } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, MeshDistortMaterial, Stars, Environment } from "@react-three/drei";
+import * as THREE from "three";
+
+function CrystalBall() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = clock.getElapsedTime() * 0.1;
+    }
+    if (innerRef.current) {
+      innerRef.current.rotation.y = -clock.getElapsedTime() * 0.2;
+      innerRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.3) * 0.2;
+    }
+  });
+
+  return (
+    <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
+      <group>
+        {/* Outer glass sphere */}
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[1.8, 64, 64]} />
+          <meshPhysicalMaterial
+            color="#7C3AED"
+            transmission={0.9}
+            roughness={0.05}
+            thickness={0.5}
+            envMapIntensity={1}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            ior={1.5}
+            transparent
+            opacity={0.3}
+          />
+        </mesh>
+
+        {/* Inner swirling energy */}
+        <mesh ref={innerRef} scale={1.2}>
+          <sphereGeometry args={[1, 32, 32]} />
+          <MeshDistortMaterial
+            color="#D97706"
+            emissive="#7C3AED"
+            emissiveIntensity={0.4}
+            distort={0.4}
+            speed={3}
+            roughness={0.2}
+            transparent
+            opacity={0.6}
+          />
+        </mesh>
+
+        {/* Core glow */}
+        <mesh scale={0.5}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshBasicMaterial color="#F59E0B" transparent opacity={0.8} />
+        </mesh>
+
+        {/* Point light inside */}
+        <pointLight color="#D97706" intensity={2} distance={5} />
+        <pointLight color="#7C3AED" intensity={1} distance={8} position={[0, 2, 0]} />
+      </group>
+    </Float>
+  );
+}
+
+function OrbitalParticles() {
+  const groupRef = useRef<THREE.Group>(null);
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 60 }, (_, i) => {
+        const theta = (i / 60) * Math.PI * 2;
+        const radius = 2.5 + Math.random() * 1;
+        return {
+          position: [
+            Math.cos(theta) * radius,
+            (Math.random() - 0.5) * 2,
+            Math.sin(theta) * radius,
+          ] as [number, number, number],
+          speed: 0.3 + Math.random() * 0.5,
+          offset: Math.random() * Math.PI * 2,
+        };
+      }),
+    [],
+  );
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.15;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {particles.map((p, i) => (
+        <mesh key={i} position={p.position}>
+          <sphereGeometry args={[0.03, 8, 8]} />
+          <meshBasicMaterial
+            color={i % 2 === 0 ? "#D97706" : "#7C3AED"}
+            transparent
+            opacity={0.8}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export default function CrystalBallScene() {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 6], fov: 45 }}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: "transparent" }}
+    >
+      <Suspense fallback={null}>
+        <ambientLight intensity={0.2} />
+        <directionalLight position={[5, 5, 5]} intensity={0.5} />
+        <Stars radius={50} depth={50} count={1000} factor={3} saturation={0.5} fade speed={1} />
+        <CrystalBall />
+        <OrbitalParticles />
+        <Environment preset="night" />
+      </Suspense>
+    </Canvas>
+  );
+}

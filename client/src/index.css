@@ -1,0 +1,452 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none !important;
+  }
+
+  @media (pointer: coarse) {
+    * {
+      cursor: auto !important;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: #0a0a0f;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(124, 58, 237, 0.4);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0f;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7c3aed, #d97706);
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* ============================
+     TEXT GRADIENTS
+     ============================ */
+  .magic-text-gradient {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 40%, #fbbf24 60%, #d97706 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .magic-text-shimmer {
+    background: repeating-linear-gradient(
+      90deg,
+      #d97706 0%,
+      #fbbf24 10%,
+      #fff 20%,
+      #fbbf24 30%,
+      #d97706 40%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 4s linear infinite;
+  }
+
+  .magic-text-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #7c3aed 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ============================
+     BORDERS & CARDS
+     ============================ */
+  .magic-border {
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    position: relative;
+  }
+
+  .magic-border::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #7c3aed, #d97706, #7c3aed);
+    background-size: 300% 300%;
+    animation: shimmer 3s linear infinite;
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 1px;
+  }
+
+  .glass-card {
+    background: rgba(18, 16, 31, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(124, 58, 237, 0.15);
+  }
+
+  .glass-card-gold {
+    background: rgba(18, 16, 31, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+  }
+
+  /* ============================
+     GLOWS & SHADOWS
+     ============================ */
+  .magic-glow {
+    box-shadow:
+      0 0 20px rgba(124, 58, 237, 0.2),
+      0 0 60px rgba(124, 58, 237, 0.1);
+  }
+
+  .magic-glow-gold {
+    box-shadow:
+      0 0 20px rgba(217, 119, 6, 0.2),
+      0 0 60px rgba(217, 119, 6, 0.1);
+  }
+
+  .magic-glow-intense {
+    box-shadow:
+      0 0 20px rgba(124, 58, 237, 0.3),
+      0 0 60px rgba(124, 58, 237, 0.2),
+      0 0 120px rgba(124, 58, 237, 0.1);
+  }
+
+  .magic-glow-twilio {
+    box-shadow:
+      0 0 20px rgba(242, 47, 70, 0.2),
+      0 0 60px rgba(242, 47, 70, 0.1);
+  }
+
+  /* ============================
+     LEVITATE HOVER EFFECT
+     ============================ */
+  .levitate {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+  }
+
+  .levitate:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 10px 40px rgba(124, 58, 237, 0.3),
+      0 0 80px rgba(124, 58, 237, 0.1);
+  }
+
+  /* ============================
+     PLAYING CARD DESIGN
+     ============================ */
+  .card-back {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 5px,
+        rgba(124, 58, 237, 0.05) 5px,
+        rgba(124, 58, 237, 0.05) 10px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 5px,
+        rgba(217, 119, 6, 0.05) 5px,
+        rgba(217, 119, 6, 0.05) 10px
+      ),
+      linear-gradient(135deg, #12101f 0%, #1a103a 50%, #12101f 100%);
+  }
+
+  .card-back-ornate {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(217, 119, 6, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.05) 0%, transparent 70%),
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(124, 58, 237, 0.03) 0deg 10deg,
+        transparent 10deg 20deg
+      ),
+      linear-gradient(135deg, #0f0d1a 0%, #1a103a 50%, #0f0d1a 100%);
+  }
+
+  /* ============================
+     CURTAIN
+     ============================ */
+  .curtain-left {
+    background: linear-gradient(
+      90deg,
+      #1a0a2e 0%,
+      #2d1052 30%,
+      #4a1a7a 60%,
+      #1a0a2e 100%
+    );
+    background-size: 100% 100%;
+  }
+
+  .curtain-left::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      rgba(0, 0, 0, 0.1) 2px,
+      transparent 4px
+    );
+  }
+
+  .curtain-right {
+    background: linear-gradient(
+      -90deg,
+      #1a0a2e 0%,
+      #2d1052 30%,
+      #4a1a7a 60%,
+      #1a0a2e 100%
+    );
+    background-size: 100% 100%;
+  }
+
+  .curtain-right::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      rgba(0, 0, 0, 0.1) 2px,
+      transparent 4px
+    );
+  }
+
+  /* ============================
+     SMOKE / MIST
+     ============================ */
+  .smoke-layer {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(217, 119, 6, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(124, 58, 237, 0.04) 0%, transparent 60%);
+    filter: blur(40px);
+    animation: smokeFloat 12s ease-in-out infinite;
+  }
+
+  /* ============================
+     SECTION DIVIDER
+     ============================ */
+  .magic-divider {
+    position: relative;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(124, 58, 237, 0.3) 20%,
+      rgba(217, 119, 6, 0.5) 50%,
+      rgba(124, 58, 237, 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  .magic-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #d97706;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.6), 0 0 40px rgba(217, 119, 6, 0.3);
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  /* ============================
+     RITUAL CIRCLE (booking)
+     ============================ */
+  .ritual-circle {
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 50%;
+    animation: ritualSpin 20s linear infinite;
+  }
+
+  .ritual-circle::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed rgba(217, 119, 6, 0.2);
+    border-radius: 50%;
+    animation: ritualSpin 15s linear infinite reverse;
+  }
+
+  .ritual-circle::after {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    border-radius: 50%;
+    animation: ritualSpin 25s linear infinite;
+  }
+
+  /* ============================
+     3D TILT CARD
+     ============================ */
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+  }
+
+  .tilt-card-inner {
+    transform: translateZ(40px);
+  }
+
+  /* ============================
+     STAR FIELD
+     ============================ */
+  .stars-small {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+      radial-gradient(1px 1px at 50% 40%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+      radial-gradient(1px 1px at 70% 80%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+      radial-gradient(1px 1px at 90% 10%, rgba(255, 255, 255, 0.4) 50%, transparent 50%);
+    animation: starTwinkle 4s ease-in-out infinite;
+  }
+
+  /* ============================
+     PLAYING CARD SUITS
+     ============================ */
+  .suit-spade::before { content: "\2660"; }
+  .suit-heart::before { content: "\2665"; color: #DC2626; }
+  .suit-diamond::before { content: "\2666"; color: #DC2626; }
+  .suit-club::before { content: "\2663"; }
+}
+
+/* ============================
+   KEYFRAME ANIMATIONS
+   ============================ */
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes textShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.4), 0 0 40px rgba(217, 119, 6, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(217, 119, 6, 0.7), 0 0 60px rgba(217, 119, 6, 0.4); }
+}
+
+@keyframes smokeFloat {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1); opacity: 0.6; }
+  5% { transform: translateX(3px) translateY(-2px) scale(1.01); opacity: 0.61; }
+  25% { transform: translateX(30px) translateY(-20px) scale(1.1); opacity: 0.8; }
+  50% { transform: translateX(-20px) translateY(10px) scale(0.95); opacity: 0.5; }
+  75% { transform: translateX(15px) translateY(-10px) scale(1.05); opacity: 0.7; }
+  95% { transform: translateX(3px) translateY(-2px) scale(1.01); opacity: 0.61; }
+}
+
+@keyframes ritualSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0) rotate(var(--card-rotate, 0deg)); }
+  50% { transform: translateY(-15px) rotate(calc(var(--card-rotate, 0deg) + 3deg)); }
+}
+
+@keyframes wandSparkle {
+  0% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+  100% { opacity: 0; transform: scale(0) rotate(360deg); }
+}
+
+@keyframes magicAppear {
+  0% { opacity: 0; transform: scale(0.5) translateY(20px); filter: blur(10px); }
+  60% { opacity: 1; transform: scale(1.05) translateY(-5px); filter: blur(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes sparkleTrail {
+  0% { width: 0; opacity: 0; }
+  30% { opacity: 1; }
+  100% { width: 100%; opacity: 0; }
+}
+
+@keyframes pullFromHat {
+  0% { transform: translateY(40px) scaleY(0); opacity: 0; }
+  40% { transform: translateY(-10px) scaleY(1.1); opacity: 1; }
+  70% { transform: translateY(5px) scaleY(0.95); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+
+@keyframes smokeRise {
+  0% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-30px) scale(1.5); opacity: 0.15; }
+  100% { transform: translateY(-60px) scale(2); opacity: 0; }
+}
+
+@keyframes orbitalFloat {
+  0% { transform: rotate(0deg) translateX(var(--orbit-radius, 100px)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--orbit-radius, 100px)) rotate(-360deg); }
+}
+
+@keyframes cardFan {
+  0% { transform: rotate(0deg) translateY(0); }
+  100% { transform: rotate(var(--fan-angle, 0deg)) translateY(var(--fan-lift, 0px)); }
+}
+
+@keyframes mysticalPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 15px rgba(124, 58, 237, 0.2),
+      0 0 30px rgba(124, 58, 237, 0.1),
+      inset 0 0 15px rgba(124, 58, 237, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 25px rgba(124, 58, 237, 0.4),
+      0 0 50px rgba(124, 58, 237, 0.2),
+      inset 0 0 25px rgba(124, 58, 237, 0.2);
+  }
+}
+
+@keyframes borderRotate {
+  from { --border-angle: 0deg; }
+  to { --border-angle: 360deg; }
+}

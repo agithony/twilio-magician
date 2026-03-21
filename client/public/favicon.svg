@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Wand shaft -->
+  <rect x="28" y="20" width="8" height="36" rx="2" fill="url(#shaft)" transform="rotate(-15 32 38)"/>
+  <!-- White tip -->
+  <rect x="28" y="12" width="8" height="12" rx="2" fill="url(#tip)" transform="rotate(-15 32 38)"/>
+  <!-- Gold band -->
+  <rect x="27" y="19" width="10" height="4" rx="1" fill="#D97706" transform="rotate(-15 32 38)"/>
+  <!-- Sparkle at tip -->
+  <g transform="translate(29 8) rotate(-15 3 3)">
+    <path d="M3 0 L3.8 2.2 L6 3 L3.8 3.8 L3 6 L2.2 3.8 L0 3 L2.2 2.2 Z" fill="#FCD34D"/>
+  </g>
+  <!-- Small sparkles -->
+  <g opacity="0.8">
+    <path d="M18 6 L18.5 7.5 L20 8 L18.5 8.5 L18 10 L17.5 8.5 L16 8 L17.5 7.5 Z" fill="#FCD34D"/>
+    <path d="M40 2 L40.4 3 L41.4 3.4 L40.4 3.8 L40 4.8 L39.6 3.8 L38.6 3.4 L39.6 3 Z" fill="#A78BFA"/>
+    <path d="M14 16 L14.3 16.8 L15.1 17.1 L14.3 17.4 L14 18.2 L13.7 17.4 L12.9 17.1 L13.7 16.8 Z" fill="#F59E0B"/>
+  </g>
+  <defs>
+    <linearGradient id="shaft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2D2D4A"/>
+      <stop offset="50%" stop-color="#1A1A2E"/>
+      <stop offset="100%" stop-color="#2D2D4A"/>
+    </linearGradient>
+    <linearGradient id="tip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#C4B5FD"/>
+    </linearGradient>
+  </defs>
+</svg>
