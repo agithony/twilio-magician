@@ -72,66 +72,36 @@ export const conceptContent = {
 };
 
 export const tricks: Trick[] = [
-  {
-    id: "mind-reader",
-    name: "The Mind Reader",
-    description:
-      "An audience member thinks of a card. Without a word spoken, a text message arrives on their phone revealing their exact choice.",
-    twilioProduct: "Twilio SMS",
-    techExplanation:
-      "Using Twilio's Programmable Messaging API, the reveal is sent as an SMS at the perfect dramatic moment.",
-    image: "/images/tricks/mind-reader.jpg",
-  },
-  {
-    id: "voice-from-beyond",
-    name: "The Voice from Beyond",
-    description:
-      "A sealed prediction is placed on stage. Then a mysterious phone call plays a recorded voice that matches the prediction perfectly.",
-    twilioProduct: "Twilio Voice",
-    techExplanation:
-      "Twilio's Programmable Voice API triggers a call with dynamically generated TwiML to deliver the reveal.",
-    image: "/images/tricks/voice-beyond.jpg",
-  },
-  {
-    id: "digital-vanish",
-    name: "The Digital Vanish",
-    description:
-      "A chosen card vanishes from the deck and reappears — digitally — on the audience member's phone screen via a video call.",
-    twilioProduct: "Twilio Video",
-    techExplanation:
-      "Twilio's Video API creates a real-time video room where the vanished card makes its dramatic digital reappearance.",
-    image: "/images/tricks/digital-vanish.jpg",
-  },
-  {
-    id: "impossible-prediction",
-    name: "The Impossible Prediction",
-    description:
-      "Before the show, audience members text a number. Their collective choices are analyzed and a seemingly impossible prediction is revealed.",
-    twilioProduct: "Twilio Functions",
-    techExplanation:
-      "Twilio Functions processes incoming SMS in real-time, aggregating audience responses to drive the prediction logic.",
-    image: "/images/tricks/impossible-prediction.jpg",
-  },
-  {
-    id: "teleportation",
-    name: "The Teleportation",
-    description:
-      "A signed card disappears and is found inside a sealed envelope — confirmed by a WhatsApp message with photographic proof.",
-    twilioProduct: "Twilio WhatsApp",
-    techExplanation:
-      "The WhatsApp Business API sends a media message with the photo at the climactic moment of the reveal.",
-    image: "/images/tricks/teleportation.jpg",
-  },
-  {
-    id: "crowd-oracle",
-    name: "The Crowd Oracle",
-    description:
-      "The entire audience votes via text. The collective decision drives the outcome of the trick in real-time.",
-    twilioProduct: "Twilio Sync",
-    techExplanation:
-      "Twilio Sync aggregates audience votes in real-time, with results displayed live on screen as votes pour in.",
-    image: "/images/tricks/crowd-oracle.jpg",
-  },
+    {
+        id: "mind-reader",
+        name: "Twilio Knows Your Card",
+        description:
+            "An audience member picks a card. A text message arrives on their phone revealing their exact choice.",
+        twilioProduct: "Twilio SMS",
+        techExplanation:
+            "Using Twilio's Programmable Messaging API, the reveal is sent as an SMS at the perfect dramatic moment.",
+        image: "/images/tricks/mind-reader.jpg",
+    },
+    {
+        id: "voice-from-beyond",
+        name: "The Predictive Call",
+        description:
+            "An audience member picks a card. Then, over a phone call a mysterious voice matches their card perfectly.",
+        twilioProduct: "Twilio Voice",
+        techExplanation:
+            "Twilio's Programmable Voice API triggers a call over Conversation Relay to deliver the reveal.",
+        image: "/images/tricks/voice-beyond.jpg",
+    },
+    {
+        id: "digital-vanish",
+        name: "The Teleporting Card",
+        description:
+            "A chosen card vanishes from the deck and reappears — digitally — on the audience member's phone.",
+        twilioProduct: "Twilio SMS",
+        techExplanation:
+            "Twilio's Programmable Messaging API makes a card appear on the spectators phone in the blink of an eye.",
+        image: "/images/tricks/digital-vanish.jpg",
+    }
 ];
 
 export const videos: Video[] = [
