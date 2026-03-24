@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
+import { asset } from "../utils/assetPath";
 
 interface SoundManagerContextType {
   enabled: boolean;
@@ -22,7 +23,7 @@ export function useSoundManagerProvider() {
 
   // Preload background music as a plain HTML5 audio element (no async import needed)
   useEffect(() => {
-    const audio = new Audio("/sounds/bg-music.mp3");
+    const audio = new Audio(asset("/sounds/bg-music.mp3"));
     audio.loop = true;
     audio.volume = 0.15;
     audio.preload = "auto";
@@ -57,7 +58,7 @@ export function useSoundManagerProvider() {
       sfxCacheRef.current[sound].play();
     } else {
       const { Howl } = await import("howler");
-      const newHowl = new Howl({ src: [`/sounds/${sound}.mp3`], volume: 0.3 });
+      const newHowl = new Howl({ src: [asset(`/sounds/${sound}.mp3`)], volume: 0.3 });
       sfxCacheRef.current[sound] = newHowl;
       newHowl.play();
     }

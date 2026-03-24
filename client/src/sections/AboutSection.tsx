@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "../components/SectionWrapper";
 import { aboutContent } from "../data/portfolio";
+import { asset } from "../utils/assetPath";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -120,11 +121,11 @@ export default function AboutSection() {
               <div className="absolute inset-x-[42px] top-[110px] bottom-[110px] overflow-hidden z-10">
                 <div className="absolute -inset-[2px] border-2 border-red-700/20 rounded-sm pointer-events-none z-10" />
                 <picture>
-                  <source srcSet="/images/magician-portrait.png" type="image/png" />
-                  <source srcSet="/images/magician-portrait.jpg" type="image/jpeg" />
-                  <source srcSet="/images/magician-portrait.jpeg" type="image/jpeg" />
+                  <source srcSet={asset("/images/magician-portrait.png")} type="image/png" />
+                  <source srcSet={asset("/images/magician-portrait.jpg")} type="image/jpeg" />
+                  <source srcSet={asset("/images/magician-portrait.jpeg")} type="image/jpeg" />
                   <img
-                    src="/images/magician-portrait.png"
+                    src={asset("/images/magician-portrait.png")}
                     alt="The Twilio Magician"
                     className="w-full h-full object-cover"
                     loading="lazy"

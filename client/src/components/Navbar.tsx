@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "../data/portfolio";
+import { asset } from "../utils/assetPath";
 import SoundToggle from "./SoundToggle";
 
 const navItems = [
@@ -49,7 +50,7 @@ export default function Navbar() {
           href="#hero"
           className="group flex items-center gap-2.5"
         >
-          <img src="/images/twilio-logo.png" alt="Twilio" className="w-7 h-7 object-contain" />
+          <img src={asset("/images/twilio-logo.png")} alt="Twilio" className="w-7 h-7 object-contain" />
           <span className="font-display text-lg text-white group-hover:text-magic-gold-light transition-colors">
             {siteConfig.name}
           </span>
