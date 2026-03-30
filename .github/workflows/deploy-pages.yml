@@ -36,7 +36,7 @@ jobs:
           VITE_BASE_PATH: /twilio-magician/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: client/dist
 
