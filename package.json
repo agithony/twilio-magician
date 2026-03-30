@@ -1,6 +1,7 @@
 {
   "name": "twilio-magician",
   "private": true,
+  "packageManager": "pnpm@10.20.0",
   "scripts": {
     "dev": "concurrently --names server,client -c blue,magenta \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
     "build": "pnpm --filter client build && pnpm --filter server build",
