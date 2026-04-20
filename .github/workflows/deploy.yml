@@ -53,6 +53,12 @@ jobs:
         run: |
           EXISTS=$(az containerapp show --name $APP_NAME --resource-group $RESOURCE_GROUP 2>/dev/null && echo "yes" || echo "no")
           if [ "$EXISTS" = "yes" ]; then
+            APP_ID=$(az containerapp show --name $APP_NAME --resource-group $RESOURCE_GROUP --query "id" -o tsv)
+            az tag update \
+              --operation merge \
+              --resource-id "$APP_ID" \
+              --tags created_by=github-actions managed_by=twilio-magician-ci \
+              --output none
             az containerapp update \
               --name $APP_NAME \
               --resource-group $RESOURCE_GROUP \
@@ -69,7 +75,8 @@ jobs:
               --target-port 8080 \
               --ingress external \
               --min-replicas 0 \
-              --max-replicas 1
+              --max-replicas 1 \
+              --tags created_by=github-actions managed_by=twilio-magician-ci
           fi
 
       - name: Print app URL
