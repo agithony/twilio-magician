@@ -7,6 +7,7 @@ import MagicCursor from "./components/MagicCursor";
 import ParticleField from "./components/ParticleField";
 import MagicDivider from "./components/MagicDivider";
 import EasterEggs from "./components/EasterEggs";
+import CreatorSignature from "./components/CreatorSignature";
 import HeroSection from "./sections/HeroSection";
 import AboutSection from "./sections/AboutSection";
 import ConceptSection from "./sections/ConceptSection";
@@ -57,6 +58,9 @@ export default function App() {
           <ParticleField />
           <EasterEggs />
           <Navbar />
+          <div className="creator-signature-position">
+            <CreatorSignature />
+          </div>
           <main>
             <HeroSection />
             <MagicDivider variant="wand" />
