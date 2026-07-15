@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="client/public/images/twilio-magician-icon.png" alt="The Twilio Magician icon" width="180">
+</p>
+
 # The Twilio Magician
 
 [![CI](https://github.com/anthonyjdella/twilio-magician/actions/workflows/ci.yml/badge.svg)](https://github.com/anthonyjdella/twilio-magician/actions/workflows/ci.yml)
@@ -8,8 +12,17 @@ A magic-themed portfolio website for Anthony Dellavecchia, Developer Evangelist 
 
 This repository does not call Twilio APIs at runtime and does not require Twilio credentials. Twilio appears in the site content to describe the live magic performances and the products used in those demos.
 
+## In Action
+
+| Preview | Description |
+| --- | --- |
+| <img src="client/public/images/gallery/gallery-1.jpg" alt="Demonstrating the Twilio Knows Your Card trick" width="420"> | **AI-powered card magic.** A live demonstration of **Twilio Knows Your Card**, combining an interactive card reveal with Twilio-powered storytelling. |
+| <img src="client/public/images/website-homepage.png" alt="The Twilio Magician website homepage" width="420"> | **Immersive portfolio experience.** The homepage opens like a stage, combining a cinematic hero, animated cards, particles, and magic-themed navigation. |
+| <img src="client/public/images/website-repertoire.png" alt="The Twilio Magician website repertoire section" width="420"> | **Interactive trick repertoire.** Flip-card experiences connect classic magic effects with Twilio SMS, Voice, and the technology behind each performance. |
+
 ## Contents
 
+- [In Action](#in-action)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
